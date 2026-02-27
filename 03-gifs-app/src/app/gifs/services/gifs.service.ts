@@ -22,7 +22,21 @@ export class GifsService {
   private http = inject(HttpClient);
 
   trendingGifs = signal<Gif[]>([]);
-  trendingGifsLoading = signal(true);
+  trendingGifsLoading = signal(false);
+  private trendingPage = signal(0);
+
+  //Para hacer el masonry, es necesario hacer algo del tipo [[gif, gif, gif], [gif, gif, gif], [gif, gif, gif]]
+  trendingGifGroup = computed<Gif[][]>(() => {
+    const groups = [];
+    console.log(this.trendingGifs().length);
+    for (let i = 0; i < this.trendingGifs().length; i += 3) {
+      groups.push(this.trendingGifs().slice(i, i + 3));
+    }
+
+    return groups;
+  });
+
+  //Para cargar más gifs al hacer scroll
 
   searchedGifs = signal<Gif[]>([]);
   searchedGifsLoading = signal(true);
@@ -43,15 +57,26 @@ export class GifsService {
   });
 
   loadTrendingGifs() {
+    //Solo permitimos un loading simultaneo, si ya se están cargando los gifs, no hacemos nada
+    if(this.trendingGifsLoading()) return;
+
+    // En caso de no haber un loading, seteamos a true el loading y hacemos la petición
+    this.trendingGifsLoading.set(true);
+
     this.http.get<GiphyResponse>(`${environment.giphyUrl}/gifs/trending`, {
       params: {
         api_key: environment.giphyApiKey,
         limit: '25',
+        offset: this.trendingPage() * 25,
       }
     }).subscribe( (response) => {
       const gifs = GifMapper.mapGiphyItemsToGifArray(response.data);
-      this.trendingGifs.set(gifs);
+      console.log(this.trendingGifs());
+      this.trendingGifs.update(currentGifs => [...currentGifs, ...gifs]);
+      console.log(this.trendingGifs());
+      // this.trendingGifs.set(gifs);
       this.trendingGifsLoading.set(false);
+      this.trendingPage.update(currentPage => currentPage + 1);
     });
   }
 

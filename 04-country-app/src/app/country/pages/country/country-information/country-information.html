@@ -1,0 +1,47 @@
+<section class="mx-10 my-10">
+    <h1 class="text-3xl flex flex-row gap-2 align-middle "><img src="{{ country().imageSvg }}" width="50" height="auto" alt="">{{ country().name }}</h1>
+    <div class="stats shadow mt-5 justify-center w-full">
+        <div class="stat place-items-center">
+            <div class="stat-title">País</div>
+            <div class="stat-value">{{ country().name }}</div>
+            <div class="stat-desc">{{ country().region }}</div>
+        </div>
+
+        <div class="stat place-items-center">
+            <div class="stat-title">Población</div>
+            <div class="stat-value">{{ country().population | number }}</div>
+            <div class="stat-desc text-secondary">Actualizado en {{ currentYear() }}</div>
+        </div>
+
+        <div class="stat place-items-center">
+            <div class="stat-title">Subregión</div>
+            <div class="stat-value">{{ country().subRegion }}</div>
+            <div class="stat-desc">{{ country().region }}</div>
+        </div>
+        </div>
+    <h2 class="text-xl font-thin mt-5">Capital: {{ country().capital }}</h2>
+    <h2 class="text-xl font-thin mt-5">Idiomas:</h2>
+    <ul class=" list-disc ml-5 mt-5">
+        @for (language of languages(); track $index) {
+            <li>{{ language[1] }}</li>
+        }
+    </ul>
+    <h2 class="text-xl font-thin mt-5">Monedas:</h2>
+    <ul class=" list-disc ml-5 mt-5">
+        @for (currency of currencies(); track $index) {
+            <li>{{ currency[0] }}</li>
+        }
+    </ul>
+    <figure class="diff aspect-16/9 mt-5 max-w-2xl" tabindex="0">
+        <div class="diff-item-1" role="img" tabindex="0">
+            <img alt="daisy" src="{{ country().imageSvg }}" />
+        </div>
+        <div class="diff-item-2" role="img">
+            <img
+            alt="daisy"
+            class="blur brightness-75"
+            src="{{ country().imageSvg }}" />
+        </div>
+        <div class="diff-resizer"></div>
+    </figure>
+</section>

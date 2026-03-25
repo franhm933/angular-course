@@ -3,9 +3,10 @@
         type="text"
         class="input input-bordered mr-2 w-56"
         placeholder="{{ placeholder() }}"
+        [value]="inputValue()"
         autofocus
         #txtSearch
-        (keyup)="onSearch(txtSearch.value)"
+        (keyup)="inputValue.set(txtSearch.value)"
     >
-    <button class="btn btn-primary" (click)="onSearch(txtSearch.value)">Buscar</button>
+    <button class="btn btn-primary" (click)="inputValue.set(txtSearch.value)">Buscar</button>
 </section>

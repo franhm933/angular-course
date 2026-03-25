@@ -6,6 +6,7 @@
 <!-- Con resources -->
 <country-search-input 
     placeholder="Buscar por capital"
+    [initialValue]="query()"
     (value)="query.set($event)"/>
 
 <!-- Para angular < 19  -->
